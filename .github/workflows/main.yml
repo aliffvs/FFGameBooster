@@ -1,0 +1,22 @@
+name: FFGameBooster Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Check project files
+        run: |
+          echo "Memeriksa file proyek FFGameBooster"
+          ls -la
