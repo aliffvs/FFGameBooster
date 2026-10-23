@@ -1,22 +1,39 @@
+
 name: FFGameBooster Build
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
-      - name: Check project files
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build APK
         run: |
-          echo "Memeriksa file proyek FFGameBooster"
-          ls -la
+          chmod +x gradlew 2>/dev/null || true
+          gradle assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: FFGameBooster-APK
+          path: |
+            **/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
